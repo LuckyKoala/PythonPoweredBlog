@@ -1,0 +1,12 @@
+<head>
+<title>Blog</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+{% for blog in blogs %}
+<div class="post_detail">
+    <h2 align="center"><a href={{ blog.link }} class="post_title">{{ blog.title }}</a></h2>
+	<p class="post_content">{{ blog.content }}</p>
+	<div class="post_eof"></div>
+</div>
+{% endfor %}

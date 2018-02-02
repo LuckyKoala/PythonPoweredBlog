@@ -1,0 +1,23 @@
+<!doctype html>
+<head>
+{% if blog %}
+<title>{{ blog.title }} | Blog detail</title>
+{% else %}
+<title>Not Found | Blog detail</title>
+{% endif %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+{% if blog %}
+<h1>{{ blog.title }}</h1>
+<p>{{ blog.content }}</p>
+{% else %}
+  <h1>Not Found</h1>
+{% endif %}
+
+{% if previous %}
+<a href={{ previous.link }}>{{ previous.title }}</a>&lt;&lt;&lt;
+{% endif %}
+<a href="/">返回首页</a>
+{% if next %}
+&gt;&gt;&gt;<a href={{ next.link }}>{{ next.title }}</a>
+{% endif %}
