@@ -1,1 +1,1 @@
-[½Ì³Ì](http://twodam.net/use-python-to-write-a-blog)¸üÐÂÖÐ
+ï»¿[æ•™ç¨‹](http://twodam.net/use-python-to-write-a-blog)æ›´æ–°ä¸­
