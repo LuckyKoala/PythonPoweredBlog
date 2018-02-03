@@ -124,6 +124,11 @@ def blog_detail(index):
 def login_page():
     return render_template('login.html')
 
+@app.route('/user/logout')
+def logout_page():
+    session.pop('username', None)
+    return redirect('/')
+
 
 # API
 @app.route('/api/blogs/list')
