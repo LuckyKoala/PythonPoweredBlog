@@ -9,6 +9,7 @@
 4. 用户登入登出及相关功能的权限检查
 5. 支持Markdown 支持代码高亮（颜色暂无）
 6. 实现RESTful API
+7. 前后台通过JSON交互
 '''
 
 from markdown2 import markdown
@@ -118,6 +119,11 @@ def blog_detail(index):
     return render_template('detail.html', blog=blog, \
                            previous=previous_page, \
                            next=next_page)
+
+@app.route('/user/login')
+def login_page():
+    return render_template('login.html')
+
 
 # API
 @app.route('/api/blogs/list')

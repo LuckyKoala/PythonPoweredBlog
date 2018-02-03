@@ -1,0 +1,66 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}登录{% endblock %}
+
+{% block beforehead %}
+
+<script>
+$(function () {
+    var vm = new Vue({
+        el: '#vm',
+        data: {
+            username: '',
+            password: ''
+        },
+        methods: {
+            submit: function (event) {
+                event.preventDefault();
+                var $form = $('#vm');
+                if (! this.username.trim()) {
+                    return $form.showFormError('请输入名字');
+                }
+                if (this.password.length < 6) {
+                    return $form.showFormError('口令长度至少为6个字符');
+                }
+                $form.postJSON('/api/user/login', {
+                    username: this.username.trim(),
+                    password: this.password
+                }, function (err, r) {
+                    if (err) {
+                        return $form.showFormError(err);
+                    }
+                    return location.assign('/');
+                });
+            }
+        }
+    });
+});
+</script>
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="uk-width-2-3">
+        <h1>验证权限</h1>
+		<form id="vm" v-on:submit="submit" class="uk-panel uk-panel-box uk-form">
+            <div class="uk-alert uk-alert-danger uk-hidden"></div>
+            <div class="uk-form-row">
+                <div class="uk-form-icon uk-width-1-1">
+                    <i class="uk-icon-envelope-o"></i>
+                    <input v-model="username" name="username" type="text" placeholder="请输入用户名" maxlength="50" class="uk-width-1-1 uk-form-large">
+                </div>
+            </div>
+            <div class="uk-form-row">
+                <div class="uk-form-icon uk-width-1-1">
+                    <i class="uk-icon-lock"></i>
+                    <input v-model="password" name="password" type="password" placeholder="请输入密码" maxlength="50" class="uk-width-1-1 uk-form-large">
+                    </div>
+                </div>
+            <div class="uk-form-row">
+                <button type="submit" class="uk-width-1-1 uk-button uk-button-primary uk-button-large"><i class="uk-icon-sign-in"></i> 登录</button>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

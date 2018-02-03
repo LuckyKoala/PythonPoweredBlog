@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/uikit.min.css') }}">
     <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/uikit.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/awesome.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/vue.js') }}"></script>
     {% block beforehead %}<!-- before head  -->{% endblock %}
 </head>
 <body>
@@ -20,18 +22,17 @@
             </ul>
             <div class="uk-navbar-flip">
                 <ul class="uk-navbar-nav">
-                {% if user %}
+                {% if session['username'] %}
                     <li class="uk-parent" data-uk-dropdown>
-                        <a href="#0"><i class="uk-icon-user"></i> {{ user.name }}</a>
+                        <a href="#0"><i class="uk-icon-user"></i> {{ session['username'] }}</a>
                         <div class="uk-dropdown uk-dropdown-navbar">
                             <ul class="uk-nav uk-nav-navbar">
-                                <li><a href="/signout"><i class="uk-icon-sign-out"></i> 登出</a></li>
+                                <li><a href="/api/user/logout"><i class="uk-icon-sign-out"></i> 登出</a></li>
                             </ul>
                         </div>
                     </li>
                 {% else %}
-                    <li><a href="/login"><i class="uk-icon-sign-in"></i> 登陆</a></li>
-                    <li><a href="#"><i class="uk-icon-edit"></i> 注册</a></li>
+                    <li><a href="/user/login"><i class="uk-icon-sign-in"></i> 登录</a></li>
                 {% endif %}
                 </ul>
             </div>
