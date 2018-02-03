@@ -45,7 +45,7 @@ class BlogMan:
             'title': title,
             'content': content,
             'deleted': False,
-            'link': '/blogs/' + str(index)
+            'id': str(index)
         })
 
     def list(self):
