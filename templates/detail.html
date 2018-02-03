@@ -1,15 +1,22 @@
 <!doctype html>
 <head>
 {% if blog %}
-<title>{{ blog.title }} | Blog detail</title>
+    <title>{{ blog.title }} | Blog detail</title>
 {% else %}
-<title>Not Found | Blog detail</title>
+    <title>Not Found | Blog detail</title>
 {% endif %}
-<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/uikit.min.css') }}">
+    <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/uikit.min.js') }}"></script>
 </head>
 {% if blog %}
-<h1>{{ blog.title }}</h1>
-<p>{{ blog.content }}</p>
+<article class="uk-article">
+    <h1 class="uk-article-title">
+	    <a href={{ blog.link }}>{{ blog.title }}</a>
+	</h1>
+	<p>{{ blog.content }}</p>
+</article>
 {% else %}
   <h1>Not Found</h1>
 {% endif %}

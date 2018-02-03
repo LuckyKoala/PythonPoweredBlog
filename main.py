@@ -202,12 +202,20 @@ def logout():
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
+    content = '''
+    Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor
+    incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+    nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat.
+    Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat
+    nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in
+    culpa qui officia deserunt mollit anim id est laborum.
+    '''
     #测试 文章新建
-    blogMan.new('第一篇博客', '什么内容呢')
-    blogMan.new('第二篇博客', '什么内容呢')
-    blogMan.new('第三篇博客', '什么内容呢')
-    blogMan.new('第四篇博客', '什么内容呢')
-    blogMan.new('第五篇博客', '什么内容呢')
+    blogMan.new('第一篇博客', content)
+    blogMan.new('第二篇博客', content)
+    blogMan.new('第三篇博客', content)
+    blogMan.new('第四篇博客', content)
+    blogMan.new('第五篇博客', content)
     #测试 文章更新
     blogMan.update(0, '第一篇博客', '编辑后的内容')
     #测试 文章删除及其他功能对逻辑删除的支持（例如文章详情的导航）
