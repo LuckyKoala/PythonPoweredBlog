@@ -25,13 +25,14 @@ class BlogMan:
         }
             
     def new(self, title, content):
-        index = len(self.blogs)
+        index = str(len(self.blogs))
         self.blogs.append({
             'title': title,
             'content': content,
             'deleted': False,
-            'id': str(index)
+            'id': index
         })
+        return index
 
     def list(self):
         blogs = copy.deepcopy(self.blogs)

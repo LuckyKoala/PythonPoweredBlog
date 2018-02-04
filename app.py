@@ -55,22 +55,44 @@ def login_page():
 def logout_page():
     session.pop('username', None)
     return redirect('/')
-        
+
+@app.route('/manage/blogs/new')
+def manage_create_blog():
+    return render_template('edit_blog.html', id='', \
+                           action=url_for('new_blog'))
+
+@app.route('/manage/blogs')
+def manage_blog():
+    return render_template('manage_blog.html')
+
+@app.route('/manage/blogs/update/<int:index>')
+def manage_update_blog(index):
+    return render_template('edit_blog.html', id=str(index), \
+                           action=url_for('update_blog', index=index))
+
 # API
-@app.route('/api/blogs/list')
+@app.route('/api/blogs')
 def list_blog():
     blogs = blogMan.list()
     response = {
         'blogs': blogs,
         'length': len(blogs)
     }
-    return jsonify(response), 200
+    return jsonify(response)
+
+@app.route('/api/blogs/<int:index>')
+def find_blog(index):
+    blog = blogMan.find(index)
+    if not blog:
+        resp = {'error': 'Blog not exists'}
+        return jsonify(resp)
+    return jsonify(blog)
 
 @app.route('/api/blogs/new', methods=['POST'])
 def new_blog():
     if not hasPermission():
         response = {'error': 'Please try again after you logged in'}
-        return jsonify(response), 401
+        return jsonify(response)
     
     values = request.get_json()
 
@@ -78,17 +100,20 @@ def new_blog():
     required = ['title', 'content']
     if not all(k in values for k in required):
         response = {'error': 'Missing values'}
-        return jsonify(response), 400
+        return jsonify(response)
     
-    blogMan.new(values['title'], values['content'])
-    response = {'message': 'New blog created'}
-    return jsonify(response), 200
+    index = blogMan.new(values['title'], values['content'])
+    response = {
+        'message': 'New blog created',
+        'id': index
+    }
+    return jsonify(response)
 
 @app.route('/api/blogs/update/<int:index>', methods=['POST'])
 def update_blog(index):
     if not hasPermission():
         response = {'error': 'Please try again after you logged in'}
-        return jsonify(response), 401
+        return jsonify(response)
     
     values = request.get_json()
 
@@ -96,29 +121,32 @@ def update_blog(index):
     required = ['title', 'content']
     if not all(k in values for k in required):
         response = {'error': 'Missing values'}
-        return jsonify(response), 400
+        return jsonify(response)
     
     ret = blogMan.update(index, values['title'], values['content'])
     if ret:
-        response = {'message': 'Blog updated'}
-        return jsonify(response), 200
+        response = {
+            'message': 'Blog updated',
+            'id': index
+        }
+        return jsonify(response)
     else:
         response = {'error': 'Not Found'}
-        return jsonify(response), 404
+        return jsonify(response)
 
 @app.route('/api/blogs/delete/<int:index>')
 def delete_blog(index):
     if not hasPermission():
         response = {'error': 'Please try again after you logged in'}
-        return jsonify(response), 401
+        return jsonify(response)
      
     ret = blogMan.delete(index)
     if ret:
         response = {'message': 'Blog deleted'}
-        return jsonify(response), 200
+        return jsonify(response)
     else:
         response = {'error': 'Not Found'}
-        return jsonify(response), 404
+        return jsonify(response)
 
 @app.route('/api/user/login', methods=['POST'])
 def login():
@@ -128,23 +156,23 @@ def login():
     required = ['username', 'password']
     if not all(k in values for k in required):
         response = {'error': 'Missing values'}
-        return jsonify(response), 400
+        return jsonify(response)
     username = values['username']
     password = values['password']
     if blogMan.loginWith(username, password):
         session['username'] = username
         response = {'message': 'Logged in'}
-        return jsonify(response), 200
+        return jsonify(response)
     else:
         response = {'error': 'Username is not matched with password'}
-        return jsonify(response), 401
+        return jsonify(response)
 
 @app.route('/api/user/logout')
 def logout():
     # remove the username from the session if it's there
     session.pop('username', None)
     response = {'message': 'Logged out'}
-    return jsonify(response), 200   
+    return jsonify(response) 
 
 # Handle HTTP cache properly by adding last modified timestamp of file
 @app.context_processor

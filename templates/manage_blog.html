@@ -1,0 +1,99 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}管理文章{% endblock %}
+
+{% block beforehead %}
+
+<script>
+function initVM(data) {
+    var vm = new Vue({
+	    delimiters: ['${', '}'],
+        el: '#vm',
+        data: {
+            blogs: data.blogs
+        },
+        methods: {
+            edit_blog: function (blog) {
+                location.assign('/manage/blogs/update/' + blog.id);
+            },
+            delete_blog: function (blog) {
+                if (confirm('确认要删除“' + blog.title + '”？删除后不可恢复！')) {
+                    getJSON('/api/blogs/delete/' + blog.id, function (err, r) {
+                        if (err) {
+                            return alert(err.message || err.error || err);
+                        }
+                        refresh();
+                    });
+                }
+            }
+        }
+    });
+    $('#vm').show();
+}
+$(function() {
+    getJSON('/api/blogs', function (err, results) {
+        if (err) {
+            return fatal(err);
+        }
+        $('#loading').hide();
+        initVM(results);
+    });
+});
+</script>
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="uk-width-1-1 uk-margin-bottom">
+        <div class="uk-panel uk-panel-box">
+            <ul class="uk-breadcrumb">
+                <li><a href="#">评论</a></li>
+                <li class="uk-active"><span>日志</span></li>
+                <li><a href="#">用户</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="error" class="uk-width-1-1">
+    </div>
+
+    <div id="loading" class="uk-width-1-1 uk-text-center">
+        <span><i class="uk-icon-spinner uk-icon-medium uk-icon-spin"></i> 正在加载...</span>
+    </div>
+
+    <div id="vm" class="uk-width-1-1">
+        <a href="/manage/blogs/new" class="uk-button uk-button-primary"><i class="uk-icon-plus"></i> 新日志</a>
+
+        <table class="uk-table uk-table-hover">
+            <thead>
+                <tr>
+                    <th class="uk-width-5-10">标题 / 摘要</th>
+                    <th class="uk-width-2-10">作者</th>
+					<th class="uk-width-2-10">创建时间</th>
+                    <th class="uk-width-1-10">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+			    <template v-for="blog in blogs">
+                <tr>
+                    <td>
+                        <a target="_blank" :href="'/blogs/'+ blog.id">${ blog.title }</a>
+                    </td>
+                    <td>
+                        <a target="_blank" href="#">LK</a>
+                    </td>
+					<td>
+                        <span>1970-01-01 00:00</span>
+                    </td>
+                    <td>
+                        <a href="#0" v-on:click="edit_blog(blog)"><i class="uk-icon-edit"></i>
+                        <a href="#0" v-on:click="delete_blog(blog)"><i class="uk-icon-trash-o"></i>
+                    </td>
+                </tr>
+				</template>
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
