@@ -55,7 +55,7 @@ class BlogMan:
                 如果指定增量，则递归查找
                  （使逻辑删除后，文章的导航功能仍能正常运行）
                 '''
-                return self.find(index+inc, inc)
+                return self._find_(index+inc, inc)
         return False    
         
     def delete(self, index):
